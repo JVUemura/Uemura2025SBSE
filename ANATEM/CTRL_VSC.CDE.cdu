@@ -1,0 +1,119 @@
+DCDU
+(ncdu) ( nome cdu )
+   320 CTRL01_FC   
+(----------------------------------------------------------------------
+(EFPAR (nome) (     valor      )
+(----------------------------------------------------------------------
+DEFPAR #kiPLL             -4.244
+DEFPAR #kpPLL              -.212
+DEFPAR #Wb                376.99
+DEFPAR #Xf                 .8378
+DEFPAR #Rf                 .0556
+DEFPAR #kiMCC               2777
+DEFPAR #kpMCC                .29
+(
+(----------------------------------------------------------------------
+(nb)i(tipo) (stip)s(vent) (vsai) ( p1 )( p2 )( p3 )( p4 ) (vmin) (vmax)
+(----------------------------------------------------------------------
+  12 ENTRAD               Idref
+  13 ENTRAD               Iqref
+  26 IMPORT VOLTR         Vrep
+  27 IMPORT VOLTI         Vimp
+  69 PROINT        Vdm    wPLL   #kiPLL#kpPLL1.
+  71 PROINT        wPLL   ThPLL  #Wb   0.    1.
+  96*FUNCAO COS    ThIni  X96
+  97*MULTPL        X328   X97
+                   X96    X97
+  98*MULTPL        X327   X98
+                   X100   X98
+  99*SOMA          X98    Idini
+                  -X97    Idini
+ 100*FUNCAO SIN    ThIni  X100
+ 101*FUNCAO COS    ThIni  X101
+ 102*MULTPL        X327   X102
+                   X101   X102
+ 103*SOMA          X102   Iqini
+                   X105   Iqini
+ 104*FUNCAO SIN    ThIni  X104
+ 105*MULTPL        X328   X105
+                   X104   X105
+ 106*SAIDA         Iqini
+ 107*SAIDA         Idini
+ 116 GANHO         Id     X116   #Xf
+ 117 GANHO         Iq     X117   #Xf
+ 127 FUNCAO COS    ThPLL  X127
+ 128 MULTPL        Vimp   X128
+                   X127   X128
+ 129 MULTPL        Vrep   X129
+                   X131   X129
+ 130 SOMA          X129   Vdm
+                  -X128   Vdm
+ 131 FUNCAO SIN    ThPLL  X131
+ 132 FUNCAO COS    ThPLL  X132
+ 133 MULTPL        Vrep   X133
+                   X132   X133
+ 134 SOMA          X133   Vqm
+                   X136   Vqm
+ 135 FUNCAO SIN    ThPLL  X135
+ 136 MULTPL        Vimp   X136
+                   X135   X136
+ 144*IMPORT VOLTR         X144
+ 145*IMPORT VOLTI         X145
+ 146 SOMA         -Iq     errQ
+                   Iqref  errQ
+ 147 SOMA          Idref  errD
+                  -Id     errD
+ 161 SOMA          Vqm    Voutq
+                   Uq     Voutq
+                   X116   Voutq
+ 162 SOMA         -X117   Voutd
+                   Ud     Voutd
+                   Vdm    Voutd
+ 212 FUNCAO COS    ThPLL  X212
+ 213 MULTPL        Id     X213
+                   X212   X213
+ 214 MULTPL        Iq     X214
+                   X216   X214
+ 215 SOMA          X214   Iimt
+                  -X213   Iimt
+ 216 FUNCAO SIN    ThPLL  X216
+ 217 FUNCAO COS    ThPLL  X217
+ 218 MULTPL        Iq     X218
+                   X217   X218
+ 219 SOMA          X218   Iret
+                   X221   Iret
+ 220 FUNCAO SIN    ThPLL  X220
+ 221 MULTPL        Id     X221
+                   X220   X221
+ 242 EXPORT IIRFNT Iret
+ 243 EXPORT IIIFNT Iimt
+ 293*DIVSAO        X145   X293
+                   X144   X293
+ 294*FUNCAO ATAN   X293   ThIni
+ 306 PROIN2        errQ   Uq     #kiMCC#kpMCC1.
+ 307 PROIN2        errD   Ud     #kiMCC#kpMCC1.
+ 321 GANHO         X324   Id     #Rf
+ 322 GANHO         X323   Iq     #Rf
+ 323 SOMA         -Vqm    X323
+                   Voutq  X323
+                  -X326   X323
+ 324 SOMA          X325   X324
+                   Voutd  X324
+                  -Vdm    X324
+ 325 GANHO         Iq     X325   #Xf
+ 326 GANHO         Id     X326   #Xf
+ 327*IMPORT IIRFNT        X327
+ 328*IMPORT IIIFNT        X328
+(----------------------------------------------------------------------
+(DEFVA (stip) (vdef) ( d1 )( d2 )
+(----------------------------------------------------------------------
+DEFVAL VAR    ThPLL  ThIni         
+DEFVAL        wPLL   0             
+DEFVAL        errQ   0             
+DEFVAL        errD   0             
+DEFVAL VAR    Iq     Iqini         
+DEFVAL VAR    Id     Idini         
+FIMCDU
+(
+999999
+FIM
